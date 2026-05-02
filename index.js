@@ -1,9 +1,10 @@
+const startupDebugger = require('debug')('app:startup');
+const dbDebuggger = require('debug')('app:db');
 const config = require('config');
-console.log('App Name:', config.get('name'));
 const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
-require('dotenv').config();
+require('dotenv').config({quiet:true});
 
 const app = express();
 app.use(helmet());
@@ -26,7 +27,8 @@ const PORT = process.env.PORT || 3000;
 
 async function start() {
     await connectDB();
-
+    startupDebugger('Application started in development mode');
+    dbDebuggger('Database connected');
     // sync models (creates table if not exists)
     await sequelize.sync();
 

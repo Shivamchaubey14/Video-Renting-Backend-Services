@@ -1,4 +1,5 @@
-require('dotenv').config();
+const dbDebuggger = require('debug')('app:db');
+require('dotenv').config({quiet:true});
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize(
@@ -7,7 +8,8 @@ const sequelize = new Sequelize(
     process.env.DB_PASSWORD,
     {
         host: process.env.DB_HOST,
-        dialect: 'mysql'
+        dialect: 'mysql',
+        logging: false
     }
 );
 
@@ -15,9 +17,9 @@ const sequelize = new Sequelize(
 async function connectDB() {
     try {
         await sequelize.authenticate();
-        console.log('MySQL Connected with Sequelize ✅');
+        dbDebuggger('Database connected');
     } catch (error) {
-        console.error('DB connection failed:', error);
+        dbDebuggger('DB connection failed:', error);
     }
 }
 
