@@ -7,6 +7,8 @@ const morgan = require('morgan');
 require('dotenv').config({quiet:true});
 
 const app = express();
+app.set('view engine', 'pug');
+app.set('views', './views');
 app.use(helmet());
 app.use(morgan('tiny'));
 const { connectDB, sequelize } = require('./db');

@@ -6,8 +6,14 @@ const validateUser = require('../middlewares/validateUser');
 
 
 // Root
-router.get('/', (req, res) => {
-    res.json({ message: 'Hello World!' });
+router.get('/', async (req, res) => {
+    // Get the list of users and genres to display on the homepage
+    const userList = await User.findAll();
+    console.log(userList);
+
+    const genreList = await Genre.findAll();
+    console.log(genreList);
+    res.render('index', { title: 'Home', message: 'Welcome to My Express App', users: userList, genres: genreList });
 });
 
 // GET all users
