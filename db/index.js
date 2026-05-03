@@ -24,3 +24,16 @@ async function connectDB() {
 }
 
 module.exports = { sequelize, connectDB };
+
+
+// MongoDB connection (if needed in future)
+// const mongoose = require('mongoose');
+// async function connectMongoDB() {
+//     try {
+//         await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+//         dbDebuggger('MongoDB connected');
+//     } catch (error) {
+//         dbDebuggger('MongoDB connection failed:', error);
+//     }
+// }
+// module.exports = { sequelize, connectDB, connectMongoDB };

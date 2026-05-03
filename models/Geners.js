@@ -14,3 +14,10 @@ const Genre = sequelize.define('Genre', {
 });
 
 module.exports = Genre;
+
+// MongoDB version (if needed in future)
+// const mongoose = require('mongoose');
+// const genreSchema = new mongoose.Schema({
+//     name: String
+// });
+// module.exports = mongoose.model('Genre', genreSchema);
