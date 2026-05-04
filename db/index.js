@@ -13,27 +13,27 @@ const sequelize = new Sequelize(
     }
 );
 
-// test connection
-async function connectDB() {
-    try {
-        await sequelize.authenticate();
-        dbDebuggger('Database connected');
-    } catch (error) {
-        dbDebuggger('DB connection failed:', error);
-    }
-}
+// // test connection
+// async function connectDB() {
+//     try {
+//         await sequelize.authenticate();
+//         dbDebuggger('Database connected');
+//     } catch (error) {
+//         dbDebuggger('DB connection failed:', error);
+//     }
+// }
 
-module.exports = { sequelize, connectDB };
+// module.exports = { sequelize, connectDB };
 
 
 // MongoDB connection (if needed in future)
-// const mongoose = require('mongoose');
-// async function connectMongoDB() {
-//     try {
-//         await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-//         dbDebuggger('MongoDB connected');
-//     } catch (error) {
-//         dbDebuggger('MongoDB connection failed:', error);
-//     }
-// }
-// module.exports = { sequelize, connectDB, connectMongoDB };
+const mongoose = require('mongoose');
+async function connectMongoDB() {
+    try {
+        await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+        dbDebuggger('MongoDB connected');
+    } catch (error) {
+        dbDebuggger('MongoDB connection failed:', error);
+    }
+}
+module.exports = { sequelize, connectMongoDB };
