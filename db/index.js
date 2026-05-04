@@ -1,39 +1,16 @@
-const dbDebuggger = require('debug')('app:db');
-require('dotenv').config({quiet:true});
-const { Sequelize } = require('sequelize');
-
-const sequelize = new Sequelize(
-    process.env.DB_NAME,
-    process.env.DB_USER,
-    process.env.DB_PASSWORD,
-    {
-        host: process.env.DB_HOST,
-        dialect: 'mysql',
-        logging: false
-    }
-);
-
-// // test connection
-// async function connectDB() {
-//     try {
-//         await sequelize.authenticate();
-//         dbDebuggger('Database connected');
-//     } catch (error) {
-//         dbDebuggger('DB connection failed:', error);
-//     }
-// }
-
-// module.exports = { sequelize, connectDB };
-
-
-// MongoDB connection (if needed in future)
 const mongoose = require('mongoose');
-async function connectMongoDB() {
+const dbDebugger = require('debug')('app:db');
+require('dotenv').config();
+
+async function connectDB() {
     try {
-        await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-        dbDebuggger('MongoDB connected');
+        await mongoose.connect(process.env.MONGO_URI);
+        dbDebugger('MongoDB connected');
+        console.log('✅ MongoDB connected to:', mongoose.connection.host);
     } catch (error) {
-        dbDebuggger('MongoDB connection failed:', error);
+        console.error('❌ MongoDB connection failed:', error.message);
+        process.exit(1); // crash instead of silently continuing
     }
 }
-module.exports = { sequelize, connectMongoDB };
+
+module.exports = { connectDB };

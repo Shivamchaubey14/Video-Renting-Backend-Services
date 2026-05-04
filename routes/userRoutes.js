@@ -8,10 +8,10 @@ const validateUser = require('../middlewares/validateUser');
 // Root
 router.get('/', async (req, res) => {
     // Get the list of users and genres to display on the homepage
-    const userList = await User.findAll();
+    const userList = await User.find();
     console.log(userList);
 
-    const genreList = await Genre.findAll();
+    const genreList = await Genre.find();
     console.log(genreList);
     res.render('index', { title: 'Home', message: 'Welcome to My Express App', users: userList, genres: genreList });
 });
@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
 // GET all users
 router.get('/data', async (req, res) => {
     try {
-        const users = await User.findAll();
+        const users = await User.find();
         res.json(users);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -29,7 +29,7 @@ router.get('/data', async (req, res) => {
 // GET user by ID
 router.get('/data/:id', async (req, res) => {
     try {
-        const user = await User.findByPk(req.params.id);
+        const user = await User.findById(req.params.id);
         res.json(user);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -49,11 +49,10 @@ router.post('/data', validateUser, async(req, res) => {
 // PUT update user by ID
 router.put('/data/:id', validateUser, async(req, res) => {
     try {
-        const user = await User.findByPk(req.params.id);
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!user) {
             return res.status(404).json({error: 'User not found'});
         }
-        await user.update(req.body);
         res.json(user);
     } catch (err) {
         res.status(400).json({error: err.message });
@@ -63,11 +62,10 @@ router.put('/data/:id', validateUser, async(req, res) => {
 // DELETE user by ID
 router.delete('/data/:id', async (req, res) => {
     try {
-        const user = await User.findByPk(req.params.id);
+        const user = await User.findByIdAndDelete(req.params.id);
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
-        await user.destroy();
         res.json({ message: 'User deleted successfully' });
     } catch (err) {
         res.status(400).json({ error: err.message });

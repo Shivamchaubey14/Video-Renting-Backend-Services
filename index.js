@@ -1,10 +1,10 @@
+const dbDebugger = require('debug')('app:db');
 const startupDebugger = require('debug')('app:startup');
-const dbDebuggger = require('debug')('app:db');
 const config = require('config');
 const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
-require('dotenv').config({quiet:true});
+require('dotenv').config();
 
 const app = express();
 app.set('view engine', 'pug');
@@ -28,12 +28,9 @@ app.use('/api', userRoutes);
 const PORT = process.env.PORT || 3000;
 
 async function start() {
-    await connectDB();
+    await connectDB(); // this now calls connectMongoDB
     startupDebugger('Application started in development mode');
-    dbDebuggger('Database connected');
-    // sync models (creates table if not exists)
-    await sequelize.sync();
-
+    dbDebugger('Database connected'); // ✅ fixed
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
     });
