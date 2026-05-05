@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     const userList = await User.find();
     console.log(userList);
 
-    const genreList = await Genre.find();
+    const genreList = await Genre.find().limit(5).sort({ name: 1 }).select('name'); // Get the latest 5 genres
     console.log(genreList);
     res.render('index', { title: 'Home', message: 'Welcome to My Express App', users: userList, genres: genreList });
 });
