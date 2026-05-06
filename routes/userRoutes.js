@@ -63,10 +63,10 @@ router.post('/data', validateUser, async(req, res) => {
     }
 });
 
-// PUT update user by ID
+// PUT update user by ID (Query first Approach)
 router.put('/data/:id', validateUser, async(req, res) => {
     try {
-        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
         if (!user) {
             return res.status(404).json({error: 'User not found'});
         }
@@ -75,6 +75,29 @@ router.put('/data/:id', validateUser, async(req, res) => {
         res.status(400).json({error: err.message });
     }
 });
+
+// PUT update user by ID ( first Approach)
+
+// router.put('/data/:id', validateUser, async (req, res) => {
+//   try {
+//     const user = await User.findById(req.params.id);
+
+//     if (!user) {
+//       return res.status(404).json({ error: 'User not found' });
+//     }
+
+//     // Update fields manually
+//     user.name = req.body.name || user.name;
+//     user.email = req.body.email || user.email;
+
+//     const updatedUser = await user.save();
+
+//     res.json(updatedUser);
+
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// });
 
 // DELETE user by ID
 router.delete('/data/:id', async (req, res) => {
