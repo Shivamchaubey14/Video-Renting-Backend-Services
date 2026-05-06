@@ -16,15 +16,32 @@ router.get('/', async (req, res) => {
     res.render('index', { title: 'Home', message: 'Welcome to My Express App', users: userList, genres: genreList });
 });
 
-// GET all users
+// Utility to escape regex
+const escapeRegex = (text = '') =>
+  text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+// GET all users OR filter by query
 router.get('/data', async (req, res) => {
     try {
-        const users = await User.find();
+        const { name } = req.query;
+
+        let filter = {};
+
+        // If query param exists → apply filter
+        if (name) {
+            const safeName = escapeRegex(name);
+            filter.name = { $regex: `^${safeName}$`, $options: 'i' };
+        }
+
+        const users = await User.find(filter);
+
         res.json(users);
+
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
+
 
 // GET user by ID
 router.get('/data/:id', async (req, res) => {
