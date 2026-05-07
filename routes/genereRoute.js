@@ -5,7 +5,7 @@ const validateGenre = require('../middlewares/validateGener');
 
 
 // GET all genres
-router.get('/genres', async(req, res) => {
+router.get('/data', async(req, res) => {
     try {
         const genres = await Genre.find();
         res.json(genres);
@@ -15,7 +15,7 @@ router.get('/genres', async(req, res) => {
 });
 
 // Get genre by ID
-router.get('/genres/:id', async(req, res) => {
+router.get('/data/:id', async(req, res) => {
     try {
         const genre = await Genre.findById(req.params.id);
         if(!genre) {
@@ -28,7 +28,7 @@ router.get('/genres/:id', async(req, res) => {
 }); 
 
 // Create a new genre
-router.post('/genres', validateGenre, async(req, res) => {
+router.post('/data/', validateGenre, async(req, res) => {
     try {
         const genre = await Genre.create(req.body);
         res.status(201).json(genre);
@@ -38,7 +38,7 @@ router.post('/genres', validateGenre, async(req, res) => {
 });
 
 // Update a genre
-router.put('/genres/:id', validateGenre, async(req, res) => { 
+router.put('/data/:id', validateGenre, async(req, res) => { 
     try {
         const genre = await Genre.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if(!genre) {
@@ -51,7 +51,7 @@ router.put('/genres/:id', validateGenre, async(req, res) => {
 });
 
 // DELETE A genre
-router.delete('/genres/:id', async(req, res) => {
+router.delete('/data/:id', async(req, res) => {
     try {
         const genre = await Genre.findByIdAndDelete(req.params.id);
         if(!genre) {
