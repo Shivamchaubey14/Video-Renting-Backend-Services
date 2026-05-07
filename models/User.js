@@ -12,15 +12,15 @@ const userSchema = new mongoose.Schema({
         unique: true,
         match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address.'],
         validate: {
-            validator: function(v) {
-                const user = await mongoose.models.User.findOne({email: value});
-                if(this._id) {
-                    if(user && user._id.toString() !== this._id.toString()) {
+            validator: async function(v) {
+                const user = await mongoose.models.User.findOne({email: v});
+                if (this._id) {
+                    if (user && user._id.toString() !== this._id.toString()) {
                         return false;
                     }
                 }
                 return !user;
-            }, 
+            },
             message: 'Email already exists'
         }
     }
