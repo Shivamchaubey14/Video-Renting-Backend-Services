@@ -15,6 +15,7 @@ const { connectDB, sequelize } = require('./db');
 const userRoutes = require('./routes/userRoutes');
 const genreRoutes = require('./routes/genereRoutes');
 const movieRoutes = require('./routes/movieRoutes');
+const rentalRoutes = require('./routes/rentalRoutes');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -24,6 +25,7 @@ app.use(express.static('public'));
 app.use('/api/genres', genreRoutes);
 app.use('/api/customers', userRoutes);
 app.use('/api/movies', movieRoutes);
+app.use('/api/rentals', rentalRoutes);
 // start server
 const PORT = process.env.PORT || 3000;
 
