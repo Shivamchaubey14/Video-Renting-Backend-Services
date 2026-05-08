@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
 const genreSchema = new mongoose.Schema({
-    name: String
+    name: {
+        type: String,
+        required: true,
+        trim: true
+    }
 });
 module.exports = mongoose.model('Genre', genreSchema);

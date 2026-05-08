@@ -13,16 +13,17 @@ app.use(helmet());
 app.use(morgan('tiny'));
 const { connectDB, sequelize } = require('./db');
 const userRoutes = require('./routes/userRoutes');
-const genreRoutes = require('./routes/genereRoute');
+const genreRoutes = require('./routes/genereRoutes');
+const movieRoutes = require('./routes/movieRoutes');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // routes
-app.use('/api/generes', genreRoutes);
+app.use('/api/genres', genreRoutes);
 app.use('/api/customers', userRoutes);
-
+app.use('/api/movies', movieRoutes);
 // start server
 const PORT = process.env.PORT || 3000;
 

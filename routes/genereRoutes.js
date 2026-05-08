@@ -1,7 +1,7 @@
 const express = require('express');
 const router = require('express').Router();
-const Genre = require('../models/Geners');
-const validateGenre = require('../middlewares/validateGener');
+const Genre = require('../models/Genre');
+const validateGenre = require('../middlewares/validateGenre');
 
 
 // GET all genres

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-const Genre = require('../models/Geners');
+const Genre = require('../models/Genre');
 const validateUser = require('../middlewares/validateUser');
 
 
