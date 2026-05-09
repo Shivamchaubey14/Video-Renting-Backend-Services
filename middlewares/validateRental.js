@@ -1,8 +1,9 @@
 const Joi = require('joi');
+const JoiObjectId = require('joi-objectid')(Joi);
 
 const rentalSchema = Joi.object({
-    userId: Joi.string().hex().length(24).required(),
-    movieId: Joi.string().hex().length(24).required(),
+    userId: JoiObjectId().required(),
+    movieId: JoiObjectId().required(),
     rentalDate: Joi.date().optional()
 });
 
