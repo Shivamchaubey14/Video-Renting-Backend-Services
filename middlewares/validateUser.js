@@ -3,7 +3,8 @@ const Joi = require('joi');
 const userSchema = Joi.object({
     name: Joi.string().trim().required(),
     email: Joi.string().email().required(),
-    age: Joi.number().integer().positive().required()
+    age: Joi.number().integer().positive().required(),
+    password: Joi.string().min(6).max(1024).required()
 });
 
 function validateUser(req, res, next) {
