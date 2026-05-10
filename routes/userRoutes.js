@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+const _ = require('lodash');
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
@@ -54,12 +56,33 @@ router.get('/data/:id', async (req, res) => {
 });
 
 // POST create new user
-router.post('/data', validateUser, async(req, res) => {
+router.post('/data', validateUser, async (req, res) => {
     try {
-        const user = await User.create(req.body);
-        res.status(201).json(user);
+
+        // Hash the password
+        const salt = await bcrypt.genSalt(10);
+
+        const hashedPassword = await bcrypt.hash(
+            req.body.password,
+            salt
+        );
+
+        // Create user with hashed password
+        const user = await User.create({
+            ..._.pick(req.body, ['name', 'email', 'age']),
+            password: hashedPassword
+        });
+
+        res.status(201).send(
+            _.pick(user, ['_id', 'name', 'email'])
+        );
+
     } catch (err) {
-        res.status(400).json({error: err.message });
+
+        res.status(400).json({
+            error: err.message
+        });
+
     }
 });
 
