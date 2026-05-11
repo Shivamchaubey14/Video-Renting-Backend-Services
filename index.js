@@ -16,6 +16,7 @@ const userRoutes = require('./routes/userRoutes');
 const genreRoutes = require('./routes/genereRoutes');
 const movieRoutes = require('./routes/movieRoutes');
 const rentalRoutes = require('./routes/rentalRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -26,6 +27,7 @@ app.use('/api/genres', genreRoutes);
 app.use('/api/customers', userRoutes);
 app.use('/api/movies', movieRoutes);
 app.use('/api/rentals', rentalRoutes);
+app.use('/api/auth', authRoutes);
 // start server
 const PORT = process.env.PORT || 3000;
 
