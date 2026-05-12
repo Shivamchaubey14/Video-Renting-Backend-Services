@@ -2,6 +2,7 @@ const express = require('express');
 const router = require('express').Router();
 const Genre = require('../models/Genre');
 const validateGenre = require('../middlewares/validateGenre');
+const { auth } = require('../middlewares/validateAuth');
 
 
 // GET all genres
@@ -28,7 +29,7 @@ router.get('/data/:id', async(req, res) => {
 }); 
 
 // Create a new genre
-router.post('/data/', validateGenre, async(req, res) => {
+router.post('/data/', auth,validateGenre, async(req, res) => {
     try {
         const genre = await Genre.create(req.body);
         res.status(201).json(genre);
@@ -38,7 +39,7 @@ router.post('/data/', validateGenre, async(req, res) => {
 });
 
 // Update a genre
-router.put('/data/:id', validateGenre, async(req, res) => { 
+router.put('/data/:id', auth, validateGenre, async(req, res) => { 
     try {
         const genre = await Genre.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if(!genre) {
@@ -51,7 +52,7 @@ router.put('/data/:id', validateGenre, async(req, res) => {
 });
 
 // DELETE A genre
-router.delete('/data/:id', async(req, res) => {
+router.delete('/data/:id', auth, validateGenre, async(req, res) => {
     try {
         const genre = await Genre.findByIdAndDelete(req.params.id);
         if(!genre) {

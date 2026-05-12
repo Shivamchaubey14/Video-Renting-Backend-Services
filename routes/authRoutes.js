@@ -6,10 +6,10 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/User');
 const Genre = require('../models/Genre');
-const validateAuth = require('../middlewares/validateAuth');
+const {validate} = require('../middlewares/validateAuth');
 
 // POST create new user
-router.post('/login', validateAuth, async (req, res) => {
+router.post('/login', validate, async (req, res) => {
     try {
 
         let user = await User.findOne({ email: req.body.email});

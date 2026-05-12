@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+const config = require('config');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const express = require('express');
@@ -57,8 +59,7 @@ router.get('/data/:id', async (req, res) => {
 
 // POST create new user
 router.post('/data', validateUser, async (req, res) => {
-    try {
-
+    try {  
         // Hash the password
         const salt = await bcrypt.genSalt(10);
 
@@ -72,10 +73,8 @@ router.post('/data', validateUser, async (req, res) => {
             ..._.pick(req.body, ['name', 'email', 'age']),
             password: hashedPassword
         });
-
-        res.status(201).send(
-            _.pick(user, ['_id', 'name', 'email'])
-        );
+        const token = jwt.sign({ _id: user._id }, config.get('jwtPrivateKey'));
+        res.header('x-auth-token', token).status(201).json(user);
 
     } catch (err) {
 
@@ -99,33 +98,6 @@ router.put('/data/:id', validateUser, async(req, res) => {
     }
 });
 
-// This is the value of the new password that is the value of the password field in the request body
-// const newPassword = req.body.password;
-
-// now this json webtoken is stored in the local 
-
-// PUT update user by ID ( first Approach)
-
-// router.put('/data/:id', validateUser, async (req, res) => {
-//   try {
-//     const user = await User.findById(req.params.id);
-
-//     if (!user) {
-//       return res.status(404).json({ error: 'User not found' });
-//     }
-
-//     // Update fields manually
-//     user.name = req.body.name || user.name;
-//     user.email = req.body.email || user.email;
-
-//     const updatedUser = await user.save();
-
-//     res.json(updatedUser);
-
-//   } catch (err) {
-//     res.status(400).json({ error: err.message });
-//   }
-// });
 
 // DELETE user by ID
 router.delete('/data/:id', async (req, res) => {
