@@ -4,7 +4,13 @@ const config = require('config');
 const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
+config.get('jwtPrivateKey');
 require('dotenv').config();
+
+if(!config.get('jwtPrivateKey')) {
+    console.error('FATAL ERROR: jwtPrivateKey is not defined.');
+    process.exit(1);
+}
 
 const app = express();
 app.set('view engine', 'pug');

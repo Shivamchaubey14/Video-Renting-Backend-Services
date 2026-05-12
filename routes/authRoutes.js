@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
+const config = require('config');
 const _ = require('lodash');
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/User');
 const Genre = require('../models/Genre');
@@ -22,7 +24,17 @@ router.post('/login', validateAuth, async (req, res) => {
             return res.status(400).json({ error: 'Invalid email or password' });
         }
 
-        res.send(true);
+        jwt.sign(
+            { _id: user._id, name: user.name, email: user.email },
+            config.get('jwtPrivateKey'),
+            { expiresIn: '1h' },
+            (err, token) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Error generating token' });
+                }
+                res.json({ token });
+            }
+        );
 
     } catch (err) {
 

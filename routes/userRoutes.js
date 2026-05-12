@@ -99,6 +99,11 @@ router.put('/data/:id', validateUser, async(req, res) => {
     }
 });
 
+// This is the value of the new password that is the value of the password field in the request body
+// const newPassword = req.body.password;
+
+// now this json webtoken is stored in the local 
+
 // PUT update user by ID ( first Approach)
 
 // router.put('/data/:id', validateUser, async (req, res) => {
