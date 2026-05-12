@@ -1,3 +1,6 @@
+const auth = require('../middlewares/validateAuth');
+const validateUser = require('../middlewares/validateUser');
+const Genre = require('../models/Genre');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const bcrypt = require('bcrypt');
@@ -5,9 +8,6 @@ const _ = require('lodash');
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-const Genre = require('../models/Genre');
-const validateUser = require('../middlewares/validateUser');
-
 
 // Root
 router.get('/', async (req, res) => {
@@ -71,9 +71,11 @@ router.post('/data', validateUser, async (req, res) => {
         // Create user with hashed password
         const user = await User.create({
             ..._.pick(req.body, ['name', 'email', 'age']),
-            password: hashedPassword
+            password: hashedPassword,
+            isAdmin: req.body.isAdmin || false
         });
-        const token = jwt.sign({ _id: user._id }, config.get('jwtPrivateKey'));
+        const token = jwt.sign({ _id: user._id, isAdmin: user.isAdmin }, config.get('jwtPrivateKey'));
+        console.log("The token is: ", token);
         res.header('x-auth-token', token).status(201).json(user);
 
     } catch (err) {
@@ -109,6 +111,22 @@ router.delete('/data/:id', async (req, res) => {
         res.json({ message: 'User deleted successfully' });
     } catch (err) {
         res.status(400).json({ error: err.message });
+    }
+});
+
+// Getting the current user
+
+router.get('/me', async (req, res) => {
+    try {
+        const token = req.header('x-auth-token');
+        if (!token) {
+            return res.status(401).json({ error: 'Access denied. No token provided.' });
+        }
+        const decoded = jwt.verify(token, config.get('jwtPrivateKey'));
+        const user = await User.findById(decoded._id).select('-password');
+        res.json(user);
+    } catch (err) {
+        res.status(400).json({ error: 'Invalid token.' });
     }
 });
 

@@ -3,6 +3,7 @@ const router = require('express').Router();
 const Genre = require('../models/Genre');
 const validateGenre = require('../middlewares/validateGenre');
 const { auth } = require('../middlewares/validateAuth');
+const validateIsAdmin = require('../middlewares/validateIsAdmin');
 
 
 // GET all genres
@@ -52,7 +53,7 @@ router.put('/data/:id', auth, validateGenre, async(req, res) => {
 });
 
 // DELETE A genre
-router.delete('/data/:id', auth, validateGenre, async(req, res) => {
+router.delete('/data/:id', auth, validateIsAdmin, validateGenre, async(req, res) => {
     try {
         const genre = await Genre.findByIdAndDelete(req.params.id);
         if(!genre) {
