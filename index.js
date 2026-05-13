@@ -1,3 +1,4 @@
+const error = require('./middlewares/error');
 const dbDebugger = require('debug')('app:db');
 const startupDebugger = require('debug')('app:startup');
 const config = require('config');
@@ -35,10 +36,7 @@ app.use('/api/movies', movieRoutes);
 app.use('/api/rentals', rentalRoutes);
 app.use('/api/auth', authRoutes);
 // start server
-app.use(function (err, req, res, next) {
-    console.error(err.stack);
-    res.status(500).json({ error: 'Something went wrong!' });
-});
+app.use(error);
 
 const PORT = process.env.PORT || 3000;
 
