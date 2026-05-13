@@ -7,17 +7,17 @@ const validateIsAdmin = require('../middlewares/validateIsAdmin');
 
 
 // GET all genres
-router.get('/data', async(req, res) => {
+router.get('/data', async(req, res, next) => {
     try {
         const genres = await Genre.find();
         res.json(genres);
     } catch(err) {
-        res.status(500).json({error: err.message});
+        next(err);
     }
 });
 
 // Get genre by ID
-router.get('/data/:id', async(req, res) => {
+router.get('/data/:id', async(req, res, next) => {
     try {
         const genre = await Genre.findById(req.params.id);
         if(!genre) {
@@ -25,22 +25,22 @@ router.get('/data/:id', async(req, res) => {
         }
         res.json(genre);
     } catch(err) {
-        res.status(500).json({error: err.message});
+        next(err);
     }
 }); 
 
 // Create a new genre
-router.post('/data/', auth,validateGenre, async(req, res) => {
+router.post('/data/', auth,validateGenre, async(req, res, next) => {
     try {
         const genre = await Genre.create(req.body);
         res.status(201).json(genre);
     } catch(err) {
-        res.status(400).json({error: err.message});
+        next(err);
     }
 });
 
 // Update a genre
-router.put('/data/:id', auth, validateGenre, async(req, res) => { 
+router.put('/data/:id', auth, validateGenre, async(req, res, next) => { 
     try {
         const genre = await Genre.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if(!genre) {
@@ -48,12 +48,12 @@ router.put('/data/:id', auth, validateGenre, async(req, res) => {
         }
         res.json(genre);
     } catch(err) {
-        res.status(400).json({error: err.message});
+        next(err);
     }
 });
 
 // DELETE A genre
-router.delete('/data/:id', auth, validateIsAdmin, validateGenre, async(req, res) => {
+router.delete('/data/:id', auth, validateIsAdmin, async(req, res, next) => {
     try {
         const genre = await Genre.findByIdAndDelete(req.params.id);
         if(!genre) {
@@ -61,7 +61,7 @@ router.delete('/data/:id', auth, validateIsAdmin, validateGenre, async(req, res)
         }
         res.json({message: 'Genre deleted successfully'});
     } catch(err) {
-        res.status(500).json({error: err.message});
+        next(err);
     }
 });
 

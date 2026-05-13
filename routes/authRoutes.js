@@ -9,7 +9,7 @@ const Genre = require('../models/Genre');
 const {validate} = require('../middlewares/validateAuth');
 
 // POST create new user
-router.post('/login', validate, async (req, res) => {
+router.post('/login', validate, async (req, res, next) => {
     try {
 
         let user = await User.findOne({ email: req.body.email});
@@ -30,18 +30,14 @@ router.post('/login', validate, async (req, res) => {
             { expiresIn: '1h' },
             (err, token) => {
                 if (err) {
-                    return res.status(500).json({ error: 'Error generating token' });
+                    return next(err);
                 }
                 res.json({ token });
             }
         );
 
     } catch (err) {
-
-        res.status(400).json({
-            error: err.message
-        });
-
+        next(err);
     }
 });
 

@@ -10,7 +10,7 @@ const router = express.Router();
 const User = require('../models/User');
 
 // Root
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
     // Get the list of users and genres to display on the homepage
     const userList = await User.find();
     console.log(userList);
@@ -25,7 +25,7 @@ const escapeRegex = (text = '') =>
   text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 // GET all users OR filter by query
-router.get('/data', async (req, res) => {
+router.get('/data', async (req, res, next) => {
     try {
         const { name } = req.query;
 
@@ -42,23 +42,23 @@ router.get('/data', async (req, res) => {
         res.json(users);
 
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        next(err);
     }
 });
 
 
-// GET user by ID
-router.get('/data/:id', async (req, res) => {
+// GET user by ID            
+router.get('/data/:id', async (req, res, next) => {
     try {
         const user = await User.findById(req.params.id);
         res.json(user);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        next(err);
     }
 });
 
 // POST create new user
-router.post('/data', validateUser, async (req, res) => {
+router.post('/data', validateUser, async (req, res, next) => {
     try {  
         // Hash the password
         const salt = await bcrypt.genSalt(10);
@@ -80,15 +80,13 @@ router.post('/data', validateUser, async (req, res) => {
 
     } catch (err) {
 
-        res.status(400).json({
-            error: err.message
-        });
+        next(err);
 
     }
 });
 
 // PUT update user by ID (Query first Approach)
-router.put('/data/:id', validateUser, async(req, res) => {
+router.put('/data/:id', validateUser, async(req, res, next) => {
     try {
         const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
         if (!user) {
@@ -96,13 +94,13 @@ router.put('/data/:id', validateUser, async(req, res) => {
         }
         res.json(user);
     } catch (err) {
-        res.status(400).json({error: err.message });
+        next(err);
     }
 });
 
 
 // DELETE user by ID
-router.delete('/data/:id', async (req, res) => {
+router.delete('/data/:id', async (req, res, next) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id);
         if (!user) {
@@ -110,23 +108,23 @@ router.delete('/data/:id', async (req, res) => {
         }
         res.json({ message: 'User deleted successfully' });
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        next(err);
     }
 });
 
 // Getting the current user
 
-router.get('/me', async (req, res) => {
+router.get('/me', async (req, res, next) => {
     try {
         const token = req.header('x-auth-token');
         if (!token) {
-            return res.status(401).json({ error: 'Access denied. No token provided.' });
+            return next(new Error('Access denied. No token provided.') );
         }
         const decoded = jwt.verify(token, config.get('jwtPrivateKey'));
         const user = await User.findById(decoded._id).select('-password');
         res.json(user);
     } catch (err) {
-        res.status(400).json({ error: 'Invalid token.' });
+        next(err);
     }
 });
 

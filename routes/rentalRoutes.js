@@ -12,7 +12,7 @@ const validateRental = require('../middlewares/validateRental');
 
 
 // GET all rentals
-router.get('/data', async (req, res) => {
+router.get('/data', async (req, res, next) => {
     try {
         const rentals = await Rental.find()
             .populate('movie', 'title')
@@ -21,13 +21,13 @@ router.get('/data', async (req, res) => {
         res.json(rentals);
 
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        next(err);
     }
 });
 
 
 // Create a new rental
-router.post('/data', validateRental, async (req, res) => {
+router.post('/data', validateRental, async (req, res, next) => {
 
     const session = await mongoose.startSession();
 
@@ -53,9 +53,7 @@ router.post('/data', validateRental, async (req, res) => {
 
         await session.abortTransaction();
 
-        res.status(400).json({
-            error: err.message
-        });
+        next(err);
 
     } finally {
 

@@ -6,19 +6,19 @@ const validateMovie = require('../middlewares/validateMovie');
 
 // GET all movies
 
-router.get('/data', async(req, res) => {
+router.get('/data', async(req, res, next) => {
     try{
         const movies = await Movie.find().populate('genres', 'name');
         res.json(movies);
     } catch(err) {
-        res.status(500).json({error: err.message});
+        next(err);
     }
 });
 
 
 // Create a new movie
 
-router.post('/data/', validateMovie, async(req, res) => {
+router.post('/data/', validateMovie, async(req, res, next) => {
     try {
         const { title, releaseYear, genres } = req.body;
 
@@ -28,7 +28,7 @@ router.post('/data/', validateMovie, async(req, res) => {
         });
 
         if (validGenres.length !== genres.length) {
-            return res.status(400).json({error: 'Invalid genre IDs'});
+            return next(new Error('Invalid genre IDs'));
         }
 
         const movie = new Movie({
@@ -40,7 +40,7 @@ router.post('/data/', validateMovie, async(req, res) => {
         const savedMovie = await movie.save();
         res.status(201).json(savedMovie);
     } catch(err) {
-        res.status(400).json({error: err.message});
+        next(err);
     }
 });
 

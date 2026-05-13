@@ -35,6 +35,11 @@ app.use('/api/movies', movieRoutes);
 app.use('/api/rentals', rentalRoutes);
 app.use('/api/auth', authRoutes);
 // start server
+app.use(function (err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Something went wrong!' });
+});
+
 const PORT = process.env.PORT || 3000;
 
 async function start() {
