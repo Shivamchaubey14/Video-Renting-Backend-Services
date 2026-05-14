@@ -10,4 +10,4 @@ module.exports = async function () {
     dbDebugger('Database connected');
 
     winston.info('Database connected successfully');
-};
+}; 
