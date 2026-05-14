@@ -3,6 +3,8 @@ const router = require('express').Router();
 
 const mongoose = require('mongoose');
 
+const asyncHandler = require('express-async-handler');
+
 const Movie = require('../models/Movie');
 const Genre = require('../models/Genre');
 const Rental = require('../models/Rental');
@@ -12,56 +14,64 @@ const validateRental = require('../middlewares/validateRental');
 
 
 // GET all rentals
-router.get('/data', async (req, res) => {
-    try {
+router.get(
+    '/data',
+    asyncHandler(async (req, res) => {
+
         const rentals = await Rental.find()
             .populate('movie', 'title')
             .populate('user', 'name');
 
         res.json(rentals);
-
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
+    })
+);
 
 
 // Create a new rental
-router.post('/data', validateRental, async (req, res) => {
+router.post(
+    '/data',
+    validateRental,
+    asyncHandler(async (req, res) => {
 
-    const session = await mongoose.startSession();
+        const session = await mongoose.startSession();
 
-    try {
+        try {
 
-        session.startTransaction();
+            session.startTransaction();
 
-        const { movieId, userId, rentalDate } = req.body;
+            const {
+                movieId,
+                userId,
+                rentalDate
+            } = req.body;
 
-        const rental = new Rental({
-            movie: movieId,
-            user: userId,
-            rentalDate: rentalDate || Date.now()
-        });
+            // Create rental
+            const rental = new Rental({
+                movie: movieId,
+                user: userId,
+                rentalDate: rentalDate || Date.now()
+            });
 
-        await rental.save({ session });
+            // Save rental inside transaction
+            await rental.save({ session });
 
-        await session.commitTransaction();
+            // Commit transaction
+            await session.commitTransaction();
 
-        res.status(201).json(rental);
+            res.status(201).json(rental);
 
-    } catch (err) {
+        } catch (err) {
 
-        await session.abortTransaction();
+            // Rollback transaction
+            await session.abortTransaction();
 
-        res.status(400).json({
-            error: err.message
-        });
+            throw err;
 
-    } finally {
+        } finally {
 
-        session.endSession();
-
-    }
-});
+            session.endSession();
+        }
+    })
+);
 
 module.exports = router;
