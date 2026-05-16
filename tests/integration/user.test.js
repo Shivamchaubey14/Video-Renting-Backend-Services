@@ -51,7 +51,7 @@ describe('/api/customers', () => {
 
             const user = await User.create({
                 name: 'Shivam',
-                email: 'shivam@gmail.com',
+                email: 'xyz@gmail.com',
                 password: '123456',
                 age: 23
             });
@@ -83,7 +83,7 @@ describe('/api/customers', () => {
                 .post('/api/customers/data')
                 .send({
                     name: 'Shivam',
-                    email: 'shivam@gmail.com',
+                    email: 'xyz@gmail.com',
                     password: '123456',
                     age: 23
                 });
@@ -100,7 +100,7 @@ describe('/api/customers', () => {
             const res = await request(app)
                 .post('/api/customers/data')
                 .send({
-                    email: 'shivam@gmail.com',
+                    email: 'xyz@gmail.com',
                     password: '123456',
                     age: 23
                 });
@@ -166,7 +166,7 @@ describe('/api/customers', () => {
 
             const user = await User.create({
                 name: 'Shivam',
-                email: 'shivam@gmail.com',
+                email: 'xyz@gmail.com',
                 password: '123456',
                 age: 23
             });
@@ -186,7 +186,7 @@ describe('/api/customers', () => {
 
             expect(res.body).toHaveProperty(
                 'email',
-                'shivam@gmail.com'
+                'xyz@gmail.com'
             );
         });
 

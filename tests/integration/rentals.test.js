@@ -44,7 +44,7 @@ describe('/api/rentals', () => {
 
             const user = await User.create({
                 name: 'Shivam',
-                email: 'shivam@gmail.com',
+                email: 'xyz@gmail.com',
                 password: '123456',
                 age: 23
             });
@@ -80,7 +80,7 @@ describe('/api/rentals', () => {
 
             const user = await User.create({
                 name: 'Shivam',
-                email: 'shivam@gmail.com',
+                email: 'xyz@gmail.com',
                 password: '123456',
                 age: 23
             });
@@ -106,7 +106,7 @@ describe('/api/rentals', () => {
 
             const user = await User.create({
                 name: 'Shivam',
-                email: 'shivam@gmail.com',
+                email: 'xyz@gmail.com',
                 password: '123456',
                 age: 23
             });
