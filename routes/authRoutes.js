@@ -13,6 +13,41 @@ const User = require('../models/User');
 const Genre = require('../models/Genre');
 
 const { validate } = require('../middlewares/validateAuth');
+/**
+ * @swagger
+ * /users/data:
+ *   post:
+ *     summary: Create a new user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Shivam
+ *               email:
+ *                 type: string
+ *                 example: shivam@gmail.com
+ *               password:
+ *                 type: string
+ *                 example: 123456
+ *               age:
+ *                 type: number
+ *                 example: 24
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *       400:
+ *         description: Validation error
+ */ 
 
 
 // POST login user
