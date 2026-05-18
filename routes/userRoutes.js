@@ -1,3 +1,9 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: User APIs
+ */
 const auth = require('../middlewares/validateAuth');
 const validateUser = require('../middlewares/validateUser');
 const asyncHandler = require('express-async-handler');
@@ -10,6 +16,22 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 
+/**
+ * @swagger
+ * /users/data:
+ *   get:
+ *     summary: Get all users
+ *     tags: [Users]
+ *     parameters:
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         description: Filter users by name
+ *     responses:
+ *       200:
+ *         description: List of users
+ */
 
 // Root
 router.get(
@@ -69,6 +91,25 @@ router.get(
 );
 
 
+/**
+ * @swagger
+ * /users/data/{id}:
+ *   get:
+ *     summary: Get user by ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User found
+ *       404:
+ *         description: User not found
+ */
+
 // GET user by ID
 router.get(
     '/data/:id',
@@ -86,6 +127,39 @@ router.get(
     })
 );
 
+/**
+ * @swagger
+ * /users/data:
+ *   post:
+ *     summary: Create user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Shivam
+ *               email:
+ *                 type: string
+ *                 example: shivam@gmail.com
+ *               password:
+ *                 type: string
+ *                 example: 123456
+ *               age:
+ *                 type: number
+ *                 example: 24
+ *     responses:
+ *       201:
+ *         description: User created
+ */
 
 // POST create new user
 router.post(
@@ -127,6 +201,30 @@ router.post(
     })
 );
 
+/**
+ * @swagger
+ * /users/data/{id}:
+ *   put:
+ *     summary: Update user
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       200:
+ *         description: User updated
+ *       404:
+ *         description: User not found
+ */
 
 // PUT update user by ID
 router.put(
@@ -153,7 +251,24 @@ router.put(
     })
 );
 
-
+/**
+ * @swagger
+ * /users/data/{id}:
+ *   delete:
+ *     summary: Delete user
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User deleted
+ *       404:
+ *         description: User not found
+ */
 // DELETE user by ID
 router.delete(
     '/data/:id',
@@ -173,7 +288,20 @@ router.delete(
     })
 );
 
-
+/**
+ * @swagger
+ * /users/me:
+ *   get:
+ *     summary: Get current logged in user
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Current user data
+ *       401:
+ *         description: Unauthorized
+ */
 // Get current user
 router.get(
     '/me',

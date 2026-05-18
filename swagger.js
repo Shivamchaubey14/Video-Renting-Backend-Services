@@ -8,12 +8,14 @@ const options = {
             version: '1.0.0',
             description: 'Professional Movie Rental API Documentation'
         },
+
         servers: [
             {
                 url: 'http://localhost:3000',
                 description: 'Development Server'
             }
         ],
+
         components: {
             securitySchemes: {
                 bearerAuth: {
@@ -25,9 +27,7 @@ const options = {
         }
     },
 
-    apis: [
-        './routes/*.js'
-    ]
+    apis: ['./routes/*.js']
 };
 
 const swaggerSpec = swaggerJsDoc(options);

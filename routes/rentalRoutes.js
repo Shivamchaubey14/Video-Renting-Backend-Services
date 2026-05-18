@@ -1,3 +1,9 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Rentals
+ *   description: Rental APIs
+ */
 const express = require('express');
 const router = require('express').Router();
 
@@ -12,6 +18,16 @@ const Rental = require('../models/Rental');
 const validateMovie = require('../middlewares/validateMovie');
 const validateRental = require('../middlewares/validateRental');
 
+/**
+ * @swagger
+ * /rentals/data:
+ *   get:
+ *     summary: Get all rentals
+ *     tags: [Rentals]
+ *     responses:
+ *       200:
+ *         description: List of rentals
+ */
 
 // GET all rentals
 router.get(
@@ -26,6 +42,35 @@ router.get(
     })
 );
 
+/**
+ * @swagger
+ * /rentals/data:
+ *   post:
+ *     summary: Create rental
+ *     tags: [Rentals]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - movieId
+ *               - userId
+ *             properties:
+ *               movieId:
+ *                 type: string
+ *                 example: 664f2ab12a4c9d1234567890
+ *               userId:
+ *                 type: string
+ *                 example: 664f2ab12a4c9d1234567891
+ *               rentalDate:
+ *                 type: string
+ *                 format: date-time
+ *     responses:
+ *       201:
+ *         description: Rental created
+ */
 
 // Create a new rental
 router.post(

@@ -1,3 +1,10 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Genres
+ *   description: Genre management APIs
+ */
+
 const express = require('express');
 const router = require('express').Router();
 const asyncHandler = require('express-async-handler');
@@ -7,6 +14,16 @@ const validateGenre = require('../middlewares/validateGenre');
 const { auth } = require('../middlewares/validateAuth');
 const validateIsAdmin = require('../middlewares/validateIsAdmin');
 
+/**
+ * @swagger
+ * /genres/data:
+ *   get:
+ *     summary: Get all genres
+ *     tags: [Genres]
+ *     responses:
+ *       200:
+ *         description: List of genres
+ */
 
 // GET all genres
 router.get(
@@ -17,7 +34,24 @@ router.get(
     })
 );
 
-
+/**
+ * @swagger
+ * /genres/data/{id}:
+ *   get:
+ *     summary: Get genre by ID
+ *     tags: [Genres]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Genre found
+ *       404:
+ *         description: Genre not found
+ */
 // Get genre by ID
 router.get(
     '/data/:id',
@@ -32,6 +66,32 @@ router.get(
     })
 );
 
+/**
+ * @swagger
+ * /genres/data:
+ *   post:
+ *     summary: Create a genre
+ *     tags: [Genres]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Action
+ *     responses:
+ *       201:
+ *         description: Genre created
+ *       401:
+ *         description: Unauthorized
+ */
 
 // Create a new genre
 router.post(
@@ -44,6 +104,36 @@ router.post(
     })
 );
 
+/**
+ * @swagger
+ * /genres/data/{id}:
+ *   put:
+ *     summary: Update genre
+ *     tags: [Genres]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Comedy
+ *     responses:
+ *       200:
+ *         description: Genre updated
+ *       404:
+ *         description: Genre not found
+ */
 
 // Update a genre
 router.put(
@@ -64,7 +154,26 @@ router.put(
         res.json(genre);
     })
 );
-
+/**
+ * @swagger
+ * /genres/data/{id}:
+ *   delete:
+ *     summary: Delete genre
+ *     tags: [Genres]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Genre deleted
+ *       404:
+ *         description: Genre not found
+ */
 
 // DELETE a genre
 router.delete(
